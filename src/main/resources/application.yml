@@ -1,0 +1,21 @@
+spring:
+  mvc:
+    view:
+      prefix: /html/
+      suffix: .html
+  datasource:
+    password: root
+    username: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/mydb?serverTimezone=UTC
+
+mybatis:
+  mapper-locations: classpath:dao/*Mapper.xml
+  type-aliases-package: com.bootmaoyan.pojo
+  config-location: classpath:mybatis-config.xml
+
+
+servlet:
+  multipart:
+    max-file-size: 10MB
+    max-request-size: 100MB

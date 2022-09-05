@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootmaoyan.dao.RoomMapper">
+
+    <select id="selectAll" resultType="Room">
+        select * from room ;
+    </select>
+
+    <select id="selectByCinema" resultType="Room" parameterType="cinema">
+        select * from room
+        where cid=#{cinema.id};
+    </select>
+
+    <select id="selectById" resultType="Room" parameterType="int">
+        select * from room
+        where id=#{id};
+    </select>
+
+    <select id="selectNum" resultType="Room" parameterType="int">
+        select seat_count from room
+        where id=#{id};
+    </select>
+
+    <select id="insert" resultType="int" parameterType="Room">
+        insert into room values ( #{id},#{cinema.id},#{name},#{type.id},#{seat_count},
+    </select>
+
+</mapper>

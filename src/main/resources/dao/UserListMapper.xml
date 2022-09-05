@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bootmaoyan.dao.UserListMapper">
+    <select id="selsctByuid" resultType="Orderlist" parameterType="int">
+        SELECT p.time time,f.`name` fname,c.name cname,r.name rname,s.no no,p.price price,l.id
+        from list l,film f,plan p,room r,seat s,cinema c
+        WHERE l.uid=#{id} AND L.pid=p.id AND l.sid=s.id AND p.fid=f.id AND p.cid=c.id AND p.rid=r.id;
+    </select>
+
+    <insert id="insert" parameterType="UserListDB">
+        insert into list values(null,#{uid},#{sid},#{pid});
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        delete from list where id=#{id}
+    </delete>
+
+</mapper>

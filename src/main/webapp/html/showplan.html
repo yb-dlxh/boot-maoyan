@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>放映计划</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script>
+        $(function (){
+            $.ajax({
+                url:'/ServletShowPlan',
+                success:(function (resp){
+                    $list=resp;
+                    let i =1;
+                    // console.log("resp-"+resp);
+                    // console.log("list"+$list);
+                    $.each($list,function (){
+                        i++;
+                        var plan=$(this)[0];
+                        $tr=$("<tr>")
+                        $tr.addClass("ptr")
+                        $tr.prop("id",plan.id);
+                        if (i%2==0){
+                            $tr.addClass("even");
+                        }
+                        $td1=$("<td>");
+                        $td2=$("<td>");
+                        $td3=$("<td>");
+                        $td4=$("<td>");
+                        $td5=$("<td>");
+                        $td6=$("<td>");
+                        $span1=$("<span>");
+                        $span1.html(plan.fid.name);
+                        $span1.addClass("name")
+                        $span2=$("<span>");
+                        let d=new Date(plan.time)
+                        let h=d.getHours()>9?d.getHours():"0"+d.getHours();
+                        let m=d.getMinutes()>9?d.getMinutes():"0"+d.getMinutes();
+                        let dd=d.getDate();
+                        let MM=d.getMonth()+1;
+                        $span2.html(MM+"月"+dd+"日/"+h+":"+m)
+                        $span2.addClass("begin-time");
+                        $span3=$("<span>");
+                        $span3.html(plan.cid.name);
+                        $span3.addClass("lang");
+                        $span4=$("<span>");
+                        $span4.html(plan.rid.name);
+                        $span4.addClass("hall")
+                        $span5=$("<span>");
+                        $span5.html(plan.price);
+                        $span5.addClass("sell-price");
+                        $a=$("<a>");
+                        //为购票超链接注册事件
+                        var p= JSON.stringify(plan);
+                        // $a.attr("temp",p)
+                        $a.attr("num","from"+plan.id)
+                            $form=$("<form>")
+                            $form.attr("action","/ServletSale");
+                            $form.attr("method","post");
+                            $form.attr("id","from"+plan.id)
+                            $input=$("<input>");
+                            $input.val(p);
+                            $input.attr("name","plan")
+                            $form.append($input);
+                            $button=$("<button>")
+                            $form.append($button);
+                            $("#form").append($form);
+                        $a.click(function (){
+                            let i=$(this).attr("num")
+                            console.log(i)
+                            console.log(document.getElementById(i))
+                            document.getElementById(i).submit()
+                        })
+                        $a.html("选座购票");
+                        $td1.append($span1);
+                        $td2.append($span2);
+                        $td3.append($span3);
+                        $td4.append($span4);
+                        $td5.append($span5);
+                        $td6.append($a);
+                        $tr.append($td1);
+                        $tr.append($td2);
+                        $tr.append($td3);
+                        $tr.append($td4);
+                        $tr.append($td5);
+                        $tr.append($td6);
+                        $("#tb").append($tr);
+                    })
+                })
+            })
+            // function gosale(){
+            //     // console.log(this.attr("temp"))
+            //     var info= "/ServletSale?plan="+ $(this).attr("temp");
+            //     location.href=info;
+            // }
+        })
+    </script>
+    <style>
+     .plist{
+            width: 100%;
+            text-align: center;
+            border-spacing: 0; 
+     }
+     .ptr{
+         height: 100px;background-color: rgb(226, 225, 225);
+     }  
+     .even{
+        background-color: rgb(240, 237, 237);
+     }
+     #main{
+        width: 80%;min-width:1200px;margin: 20px auto; height: 1300px; 
+     }
+         
+    </style>
+</head>
+<body>
+<!--<tr class="ptr even">-->
+<!--    <td>-->
+<!--        <span  class="name"> 111</span>-->
+<!--    </td>-->
+<!--    <td>-->
+<!--        <span class="begin-time">18:30</span>-->
+<!--    </td>-->
+<!--    <td>-->
+<!--        <span class="lang"></span>-->
+<!--    </td>-->
+<!--    <td>-->
+<!--        <span class="hall"></span>-->
+<!--    </td>-->
+<!--    <td>-->
+<!--        <span class="sell-price"></span>-->
+<!--    </td>-->
+<!--    <td>-->
+<!--        <a >选座购票</a>-->
+<!--    </td>-->
+<!--</tr>-->
+    <div id="container">
+        <div id="header" style="position: absolute;top: 0px;width: 100%;">
+            <iframe src="header.html" frameborder="0"scrolling="no"width="100%"></iframe>
+        </div>
+        <hr style="margin-top: 80px;">
+        <div id="main">
+            <table class="plist">
+                <thead>
+                  <tr class="ptr">
+                    <th>片名</th>
+                    <th>开场时间</th>
+                    <th>影院</th>
+                    <th>放映厅</th>
+                    <th>售价（元）</th>
+                    <th>选座购票</th>
+                  </tr>
+                </thead>
+                <tbody id="tb">
+<!--                  <tr class="ptr even">-->
+<!--                      <td>-->
+<!--                          <span  class="name"> 111</span>-->
+<!--                      </td>-->
+<!--                    <td>-->
+<!--                      <span class="begin-time">18:30</span>-->
+<!--                    </td>-->
+<!--                    <td>-->
+<!--                      <span class="lang"></span>-->
+<!--                    </td>-->
+<!--                    <td>-->
+<!--                      <span class="hall"></span>-->
+<!--                    </td>-->
+<!--                    <td>-->
+<!--                      <span class="sell-price"></span>-->
+<!--                    </td>-->
+<!--                    <td>-->
+<!--                      <a >选座购票</a>-->
+<!--                    </td>-->
+<!--                  </tr>-->
+                  
+                </tbody>
+              </table>
+           
+        </div>
+        <div id="footer" style="width: 100%;min-width: 1200px;background-color: black;">
+            <p style="text-align: center;color: gainsboro;">关于猫眼 : 关于我们  管理团队  投资者关系      友情链接 : 美团网  格瓦拉  美团下载  欢喜首映<br>
+
+                商务合作邮箱：v@maoyan.com 客服电话：10105335 违法和不良信息/涉未成年人有害信息举报电话：4006018900<br>
+                
+                用户举报/涉未成年人有害信息举报邮箱：tousujubao@meituan.com 舞弊线索举报邮箱：wubijubao@maoyan.com<br>
+                
+                中华人民共和国增值电信业务经营许可证 京B2-20190350  营业性演出许可证 京演（机构）（2019）4094号<br>
+                
+                广播电视节目制作经营许可证 （京）字第08478号  网络文化经营许可证 京网文（2019）3837-369号<br>
+                
+                猫眼用户服务协议  猫眼平台交易规则总则  隐私政策<br>
+                
+                京公网安备 11010102003232号  京ICP备16022489号-1<br>
+                
+                北京猫眼文化传媒有限公司<br>
+                
+                ©2021 猫眼电影 www.maoyan.com</p>
+        </div>
+   </div>
+   <div id="form" style="display: none"></div>
+</body>
+</html>

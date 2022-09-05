@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>顶部</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script>
+        $(function (){
+            $.ajax({
+                url:'/ServletHeader',
+                success:(function (resp){
+                    if (resp=="n"){
+                       $("#userhome") .html("登录")
+                    }else{
+                        $("#userhome").mouseenter(function (){
+                           $("#userinfolist").css("display","block")
+                        })
+                        $("#user").mouseleave(function (){
+                            $("#userinfolist").css("display","none")
+                        })
+                    }
+                })
+            })
+
+            $("#logout").click(function (){
+              window.parent.location.href="/ServletLogout";
+            })
+        })
+    </script>
+    <style>
+        *{padding: 0; margin: 0;box-sizing: border-box;}
+      
+        #header>div{
+            float: left;height: 40px;margin-left: 10px;
+        }
+        #nav{
+            list-style: none;display: flex;margin-left: 10px;
+        }
+        #nav>li{
+            font-size: 20px;width: 70px;line-height: 40px;
+        }
+        #likename{
+            height: 40px;width: 200px;border-radius: 20px;font-size: 20px;padding-left: 20px;
+            background-color: rgb(247, 245, 225);border: peachpuff solid 0.5px;outline: none;
+        }
+        #serch_button{
+            position: relative;height: 40px;width: 40px;border-radius: 20px;left: -43px;top:-2px;            background-color: red;outline: none;border: none;
+        }
+        #userinfo{
+            height: 40px;width: 80px;line-height: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div id="header" style=" min-width: 1200px;width: 90%;height: 80px;
+        position: absolute;top: 0;left: 5%;padding: 20px;">
+            <div style="margin-left: 0px;" >
+                <img src="/img/logo2.png" alt="">
+            </div>
+            <div>
+               <ul id="nav">
+                <li>首页</li>
+                   <li><a href="showfilm.html" target="_blank">电影</a></li>
+                   <li><a href="showcinema.html" target="_blank">影院</a></li>
+                   <li><a href="/ServletShowPlanBefore?from=null" target="_blank">演出</a></li>
+                <li>榜单</li>
+                <li>热点</li>
+                <li>商城</li>
+            </ul>
+            </div>
+
+            <div>
+                <img src="/img/app.png" alt="">
+            </div>
+            <div >
+                <form action="/ServletShowLikenameFilm" name="" id="serch">
+                    <input type="text" name="likename" placeholder="找电影" id="likename">
+                    <button id="serch_button" type="submit" >S</button>
+                </form>
+            </div>
+            <div id="user">
+                <div id="userinfo"> <a href="userhome.html" target="_blank" id="userhome">个人中心</a></div>
+                <ul id="userinfolist" style="list-style: none;display: none;">
+<!--                    <li id="mylist">我的订单</li>-->
+                    <li id="logout">退出登录</li>
+                </ul>
+            </div>
+        </div>
+</body>
+<script>
+    // function go(){
+    // location.href="userhome.html";
+    // }
+</script>
+</html>

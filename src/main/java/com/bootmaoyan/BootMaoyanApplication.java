@@ -1,0 +1,13 @@
+package com.bootmaoyan;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class BootMaoyanApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(BootMaoyanApplication.class, args);
+    }
+
+}

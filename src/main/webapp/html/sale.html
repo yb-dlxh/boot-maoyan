@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>选座购票</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script>
+        var pri=0;
+        $(function () {
+            //加载电影内容
+            $.ajax({
+                url:'/ServletSaleInit',
+                success:(function (resp){
+                   var plan = $.parseJSON(resp)
+                    $("#img").attr("src","/img/"+plan.fid.imgno+".jpg")
+                    $(".film_name").html(plan.fid.name);
+                    //类型添加
+                    let name1;
+                    let name2;
+                    let name3;
+                    if (plan.fid.type1!=null){
+                        name1=plan.fid.type1.name
+                    }else {
+                        name1=" "
+                    }
+                    if (plan.fid.type2!=null){
+                        name2=plan.fid.type2.name
+                    }else {
+                        name2=" "
+                    }
+                    if (plan.fid.type3!=null){
+                        name3=plan.fid.type3.name
+                    }else {
+                        name3=" "
+                    }
+                    $(".film_type").html("类型:"+name1+"/"+name2+"/"+name3);
+                    $(".dar").html(plan.fid.dra);
+                    $(".ciname_name").html(plan.cid.name);
+                    $(".room").html(plan.rid.name);
+                    //添加观影时间
+                    let d=new Date(plan.time)
+                    let h=d.getHours()>9?d.getHours():"0"+d.getHours();
+                    let m=d.getMinutes()>9?d.getMinutes():"0"+d.getMinutes();
+                    let dd=d.getDate();
+                    let M =d.getMonth()+1;
+                    $(".date").html(M+"月"+dd+"日/"+h+":"+m)
+                    $("#price").html(plan.price);
+                    pri=plan.price;
+                })
+            })
+            //加载座位信息
+            $.ajax({
+                url: '/ServletSaleInitSeat',
+                success:(function (resp){
+                     $list = $.parseJSON(resp);
+                    $.each($list,function (){
+                        var seat =$(this)[0]
+                        $div1=$("<div>");
+                        $div1.addClass("seat");
+                        // $div1.on("click",getallprice);
+                        $div1.attr("id",seat.id);
+                        $div1.html(seat.no);
+
+                        if (seat.statu==1){
+                            $div1.addClass("red");
+                        }else {
+                            $div1.click(function (){
+                                $(this).toggleClass("blue")
+                                $(this).toggleClass("buy")
+                                getallprice();
+                            })
+                        }
+
+                        $("#right").append($div1)
+                    })
+                })
+            })
+        })
+
+        //确认购买按钮提交
+        function buy(){
+           var el = document.getElementsByClassName("buy");
+           //   $el=el;
+            var req="";
+           $.each($(".buy"),function (){
+              req+=($(this).attr("id")+"a");
+               // console.log($(this).attr("id"))
+               location.href="/ServletBuy?temp="+req;
+           })
+        }
+        function getallprice(){
+          let num= document.getElementsByClassName("buy")
+           // console.log(num)
+                $("#allprice").html(num.length*pri);
+
+        }
+    </script>
+<!--    <script>alert('购票成功');location.href='/html/userhome.html';</script>-->
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #main {
+            width: 80%;
+            min-width: 900px;
+            height: 400px;
+            margin: 20px auto;
+        }
+
+        #right {
+            float: left;
+            width: 400px;
+            height: 100%;
+            margin: 0 auto;
+        }
+
+        #left {
+            float: left;
+            width: 500px;
+            height: 100%;
+            border-right: solid 1px orange;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .film_div {
+            width: 460px;
+            height: 220px;
+            margin-left: 20px;
+            position: relative;
+        }
+
+        .film_img {
+            float: left;
+            width: 160px;
+            height: 220px;
+        }
+
+        .dis {
+            float: left;
+            width: 280px;
+            margin-left: 10px;
+            height: 220px;
+            font-size: 16px;
+            color: #b8b4b4;
+        }
+
+        .dis > * {
+            margin-top: 5px;
+        }
+
+        .film_name {
+            font-size: 22px;
+            color: #ff2600;
+        }
+
+        .dar {
+            height: 140px;
+            font-size: 12px;
+            overflow: hidden;
+            width: 280px;
+            word-break: break-all;
+        }
+
+        .plan_div {
+            font-size: 16px;
+            color: black;
+            height: 100px;
+        }
+
+        .plan_div > * {
+            margin-top: 5px
+        }
+
+        button {
+            width: 250px;
+            height: 30px;
+            font-size: 20px;
+            line-height: 30px;
+            background-color: red;
+            border-radius: 5px;
+            text-align: center;
+            outline: none;
+            border: none;
+        }
+        .seat{
+          float: left;  width: 40px;height: 30px;margin: 5px;background-color: aliceblue;
+            border-radius: 3px;text-align: center;line-height: 30px;
+        }
+        .red{
+            background-color: #ff2600;
+        }
+        .blue{
+            background-color: #5180e0;
+        }
+        #tip{
+            width: 100%;height: 30px;display: flex;justify-content: space-around;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<div id="header" style="position: absolute;top: 0px;width: 100%;height: 100px">
+    <iframe src="header.html" frameborder="0" scrolling="no" width="100%" height="100px"></iframe>
+</div>
+<hr style="margin-top: 80px;">
+<div id="main">
+    <div id="left">
+        <div class="film_div">
+            <div id="imgid" class="film_img">
+                <img id="img" src="">
+            </div>
+            <div class="dis">
+                <p class="film_name"></p>
+                类型:<span class="film_type"></span><br>
+                剧情简介:
+                <div class="dar"></div>
+            </div>
+
+        </div>
+        <div class="plan_div">
+            影院: <span class="ciname_name"></span><br>
+            影厅:<span class="room"></span><br>
+            观影时间:<span class="date"></span><br>
+            票价:<span id="price" style="color: red"></span>元 &nbsp;
+                <span>合计: <span id="allprice" style="color: red"></span> 元 </span>
+        </div>
+        <div>
+            <button type="button" onclick="buy()">确认购买</button>
+        </div>
+    </div>
+    <div id="right">
+<!--        <div class="seat"></div>-->
+        <div id="tip" >
+            <div class="seat">可选</div> <div class="seat blue">已选</div> <div class="seat red">已售</div>
+        </div>
+    </div>
+</div>
+
+<div id="footer" style="width: 100%;min-width: 1200px;background-color: black;">
+    <p style="text-align: center;color: gainsboro;">关于猫眼 : 关于我们 管理团队 投资者关系 友情链接 : 美团网 格瓦拉 美团下载 欢喜首映<br>
+
+        商务合作邮箱：v@maoyan.com 客服电话：10105335 违法和不良信息/涉未成年人有害信息举报电话：4006018900<br>
+
+        用户举报/涉未成年人有害信息举报邮箱：tousujubao@meituan.com 舞弊线索举报邮箱：wubijubao@maoyan.com<br>
+
+        中华人民共和国增值电信业务经营许可证 京B2-20190350 营业性演出许可证 京演（机构）（2019）4094号<br>
+
+        广播电视节目制作经营许可证 （京）字第08478号 网络文化经营许可证 京网文（2019）3837-369号<br>
+
+        猫眼用户服务协议 猫眼平台交易规则总则 隐私政策<br>
+
+        京公网安备 11010102003232号 京ICP备16022489号-1<br>
+
+        北京猫眼文化传媒有限公司<br>
+
+        ©2021 猫眼电影 www.maoyan.com</p>
+</div>
+</body>
+</html>

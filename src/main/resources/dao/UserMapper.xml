@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bootmaoyan.dao.UserMapper">
+
+    <select id="selectAll" resultType="User">
+        select * from user;
+    </select>
+
+    <select id="selectLogin" resultType="User" parameterType="User">
+        select * from user
+        where username=#{username} and pwd=#{pwd};
+    </select>
+
+    <select id="selectById" resultType="User" parameterType="User">
+        select * from user where id=#{id};
+    </select>
+
+    <select id="insert" resultType="int" parameterType="User">
+        insert into user values (#{id},#{username},#{pwd})
+    </select>
+
+</mapper>

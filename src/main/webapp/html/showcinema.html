@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>影院</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script>
+        $(function (){
+            $.ajax({
+                url:'/ServletShowAllCinema',
+                success:(function(resp){
+                    $list=resp;
+                    console.log($list)
+                    $.each($list,function (){
+                        var cinema=$(this)[0];
+                        console.log(cinema)
+                        $div1=$("<div>");
+                        $div1.addClass("cinema-cell");
+                        $div2=$("<div>");
+                        $div2.addClass("cinema-info");
+                        $p1=$("<p>")
+                        $p1.addClass("cinema-name");
+                        $p2=$("<p>");
+                        $p2.addClass("cinema-address");
+                        $div3=$("<div>")
+                        $div3.addClass("buy-btn");
+                        let s="/ServletShowPlanBefore?from=ciname&id="+cinema.id
+                        $div3.html('<div><a href='+s+' >选座购票</a></div>');
+                        $div4=$("<div>")
+                        $div4.addClass("price");
+                        $div4.html("<span className='rmb red'>￥</span><span className='stonefont'>22</span><span>起</span>");
+                        $p1.html(cinema.name);
+                        $p2.html("地址:"+cinema.address);
+
+                        $div2.append($p1);
+                        $div2.append($p2);
+                        $div1.append($div2);
+                        $div1.append($div3);
+                        $div1.append($div4);
+
+                        $("#main").append($div1);
+                    })
+                })
+            })
+        })
+    </script>
+    <style>
+        *{margin: 0;padding: 0;box-sizing: border-box;}
+        a{
+            text-decoration: none;
+        }
+    #main{
+          width: 90%;  min-width: 1200px;margin: 10px auto;
+        }
+    .cinema-cell{
+        width: 100%;min-width: 1000px;height: 100px;padding: 30px 20px 20px 0px;border: rgba(255, 99, 71, 0.034) solid 1px;
+        border-radius: 5px;
+    }
+    .cinema-info{
+        width: 400px;float: left;
+    }
+    .cinema-name{
+        font-size: 20px;line-height: 20px;height: 20px;
+    }
+    .cinema-name a{
+        color: black;
+    }
+    .cinema-name:hover{
+        color: crimson;
+    }
+    .cinema-address{
+        color: gainsboro;font-size: 15px;height: 20px;
+    }
+    .buy-btn{
+        background-color: red;float:right;border-radius: 10px;height: 40px;line-height: 40px;text-align: center;
+        width: 100px;
+    }
+    .buy-btn a{
+        color: white;
+    }
+    .buy-btn:hover{
+        background-color: rgb(253, 118, 118);
+    }
+    .price{
+        color: tomato;float: right;line-height: 40px;height: 40px;width: 100px;text-align: center;
+    }
+    </style>
+    
+</head>
+<body>
+    <div id="container">
+        <div id="header" style="position: absolute;top: 0px;width: 100%;">
+            <iframe src="header.html" frameborder="0"scrolling="no"width="100%"></iframe>
+        </div>
+        <hr style="margin-top: 80px;">
+        <div id="main">
+           <div>
+               影院列表
+           </div> 
+<!--           <div class="cinema-cell">-->
+<!--                <div class="cinema-info">-->
+<!--                 <p class="cinema-name"><a href="#"  id="name">1111111111</a></p>-->
+<!--                 <p class="cinema-address" id="address">333333333333</p>  -->
+<!--                </div>-->
+
+<!--                <div class="buy-btn">-->
+<!--                    <div><a href="#" >选座购票</a></div>-->
+<!--                  </div>-->
+
+<!--            <div class="price">-->
+<!--                <span class="rmb red">￥</span>-->
+<!--                <span class="stonefont" >22</span>-->
+<!--                <span>起</span>-->
+<!--            </div> -->
+<!--            -->
+<!--          </div>-->
+        </div>
+        <div id="footer" style="width: 100%;min-width: 1200px;background-color: black;">
+            <p style="text-align: center;color: gainsboro;">关于猫眼 : 关于我们  管理团队  投资者关系      友情链接 : 美团网  格瓦拉  美团下载  欢喜首映<br>
+
+                商务合作邮箱：v@maoyan.com 客服电话：10105335 违法和不良信息/涉未成年人有害信息举报电话：4006018900<br>
+                
+                用户举报/涉未成年人有害信息举报邮箱：tousujubao@meituan.com 舞弊线索举报邮箱：wubijubao@maoyan.com<br>
+                
+                中华人民共和国增值电信业务经营许可证 京B2-20190350  营业性演出许可证 京演（机构）（2019）4094号<br>
+                
+                广播电视节目制作经营许可证 （京）字第08478号  网络文化经营许可证 京网文（2019）3837-369号<br>
+                
+                猫眼用户服务协议  猫眼平台交易规则总则  隐私政策<br>
+                
+                京公网安备 11010102003232号  京ICP备16022489号-1<br>
+                
+                北京猫眼文化传媒有限公司<br>
+                
+                ©2021 猫眼电影 www.maoyan.com</p>
+        </div>
+   </div>
+     
+</body>
+</html>

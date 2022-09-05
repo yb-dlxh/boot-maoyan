@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bootmaoyan.dao.SeatMapper">
+
+    <select id="selectAll" resultType="Seat">
+        select * from seat
+    </select>
+
+    <select id="selectBypid" resultType="SeatDB" parameterType="int">
+        select * from seat where pid=#{id}
+    </select>
+
+    <update id="upDate"  parameterType="SeatDB">
+        update seat set statu=1 where id=#{id}
+    </update>
+
+    <update id="upDateBylid"  parameterType="int">
+        update seat set statu=0 where id=(select sid from list where id=#{id})
+    </update>
+
+    <insert id="insert" parameterType="SeatDB">
+        insert into Seat values (null,#{no},#{pid},#{statu})
+    </insert>
+
+</mapper>

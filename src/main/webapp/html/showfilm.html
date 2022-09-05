@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电影</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script>
+        $(function (){
+            init();
+            $("#showall").on( "click",red);
+            // $(".typesub").click(showBytype());
+
+            $(".typesub").on("click",showBytype);
+
+            $(".nav").on("click",showBydate);
+
+        })
+        //按照时间显示
+        function showBydate(){
+            $("#show").empty();
+            $arr = $(this).siblings();
+            $.each($arr,function (){
+                $(this).removeClass("red")
+                $(this).removeClass("white")
+            })
+            $(this).addClass("red");
+            $(this).addClass("white");
+
+            $.ajax({
+                url:'/ServletShowFilmBydate',
+                data:"th="+$(this).attr("temp"),
+                success:(function(resp){
+                    $list=resp;
+                    $.each($list,function (){
+                        var film=$(this)[0];
+                        $div1=$("<div>");
+                        $div1.click(function (){
+                            location.href="/ServletShowPlanBefore?from=film&id="+film.id
+                        });
+                        $div1.addClass("film_div");
+                        $div1.mouseenter(function (){
+                            $("#"+film.id+" .disnone").addClass("block");
+                        })
+                        $div1.mouseleave(function (){
+                            $("#"+film.id+" .disnone").removeClass("block")
+                        })
+                        $div1.attr("id",film.id);
+                        $div2=$("<div>");
+                        $div2.addClass("film_img");
+                        $img1=$("<img>");
+                        $img1.attr("src","/img/"+film.imgno+".jpg");
+                        $div3=$("<div>");
+                        $div3.addClass("disnone");
+                        $p1=$("<p>")
+                        $p1.addClass("film_name");
+                        $p1.html(film.name)
+                        $p2=$("<p>");
+                        $p2.addClass("film_type");
+                        let name1;
+                        let name2;
+                        let name3;
+                        if (film.type1!=null){
+                            name1=film.type1.name
+                        }else {
+                            name1=" "
+                        }
+                        if (film.type2!=null){
+                            name2=film.type2.name
+                        }else {
+                            name2=" "
+                        }
+                        if (film.type3!=null){
+                            name3=film.type3.name
+                        }else {
+                            name3=" "
+                        }
+                        $p2.html("类型:"+name1+"/"+name2+"/"+name3);
+                        $p3=$("<p>");
+                        $p4=$("<p>");
+                        $p3.addClass("film_date");
+                        var date=new Date(film.date);
+                        $p3.html("上映日期"+date.getFullYear()+"-"+(1+date.getMonth())+"-"+date.getDate());
+                        $p4.addClass("red_name");
+                        $p4.html(film.name);
+                        $div3.append($p1);
+                        $div3.append($p2);
+                        $div3.append($p3);
+                        $div2.append($img1);
+                        $div1.append($div2);
+                        $div1.append($div3);
+                        $div1.append($p4);
+                        $("#show").append($div1);
+                    })
+                })
+            })
+        }
+        //按照类型显示电影
+        function showBytype(){
+            $("#show").empty();
+            $arr = $(this).siblings();
+            $.each($arr,function (){
+                $(this).removeClass("red")
+                $(this).removeClass("white")
+            })
+            $(this).addClass("red");
+            $(this).addClass("white");
+            $.ajax({
+                url:'/ServletShowFilmBytype',
+                data:"type="+$(this).attr("ty"),
+                success:(function(resp){
+                    $list=resp;
+                    $.each($list,function (){
+                        var film=$(this)[0];
+                        $div1=$("<div>");
+                        $div1.click(function (){
+                            location.href="/ServletShowPlanBefore?from=film&id="+film.id
+                        });
+                        $div1.addClass("film_div");
+                        $div1.mouseenter(function (){
+                            $("#"+film.id+" .disnone").addClass("block");
+                        })
+                        $div1.mouseleave(function (){
+                            $("#"+film.id+" .disnone").removeClass("block")
+                        })
+                        $div1.attr("id",film.id);
+                        $div2=$("<div>");
+                        $div2.addClass("film_img");
+                        $img1=$("<img>");
+                        $img1.attr("src","/img/"+film.imgno+".jpg");
+                        $div3=$("<div>");
+                        $div3.addClass("disnone");
+                        $p1=$("<p>")
+                        $p1.addClass("film_name");
+                        $p1.html(film.name)
+                        $p2=$("<p>");
+                        $p2.addClass("film_type");
+                        let name1;
+                        let name2;
+                        let name3;
+                        if (film.type1!=null){
+                            name1=film.type1.name
+                        }else {
+                            name1=" "
+                        }
+                        if (film.type2!=null){
+                            name2=film.type2.name
+                        }else {
+                            name2=" "
+                        }
+                        if (film.type3!=null){
+                            name3=film.type3.name
+                        }else {
+                            name3=" "
+                        }
+                        $p2.html("类型:"+name1+"/"+name2+"/"+name3);
+                        $p3=$("<p>");
+                        $p4=$("<p>");
+                        $p3.addClass("film_date");
+                        var date=new Date(film.date);
+                        $p3.html("上映日期"+date.getFullYear()+"-"+(1+date.getMonth())+"-"+date.getDate());
+                        $p4.addClass("red_name");
+                        $p4.html(film.name);
+                        $div3.append($p1);
+                        $div3.append($p2);
+                        $div3.append($p3);
+                        $div2.append($img1);
+                        $div1.append($div2);
+                        $div1.append($div3);
+                        $div1.append($p4);
+                        $("#show").append($div1);
+                    })
+                })
+            })
+        }
+        //初始化显示全部电影
+        function init(){
+            $("#show").empty();
+            $.ajax({
+                url:'/ServletShowAllFilm',
+                success:(function(resp){
+                    $list=$.parseJSON(resp);
+                    $.each($list,function (){
+                        var film=$(this)[0];
+                        $div1=$("<div>");
+                        $div1.click(function (){
+                            location.href="/ServletShowPlanBefore?from=film&id="+film.id
+                        });
+                        $div1.addClass("film_div");
+                        $div1.mouseenter(function (){
+                            $("#"+film.id+" .disnone").addClass("block");
+                        })
+                        $div1.mouseleave(function (){
+                            $("#"+film.id+" .disnone").removeClass("block")
+                        })
+                        $div1.attr("id",film.id);
+                        $div2=$("<div>");
+                        $div2.addClass("film_img");
+                        $img1=$("<img>");
+                        $img1.attr("src","/img/"+film.imgno+".jpg");
+                        $div3=$("<div>");
+                        $div3.addClass("disnone");
+                        $p1=$("<p>")
+                        $p1.addClass("film_name");
+                        $p1.html(film.name)
+                        $p2=$("<p>");
+                        $p2.addClass("film_type");
+                        let name1;
+                        let name2;
+                        let name3;
+                        if (film.type1!=null){
+                            name1=film.type1.name
+                        }else {
+                            name1=" "
+                        }
+                        if (film.type2!=null){
+                            name2=film.type2.name
+                        }else {
+                            name2=" "
+                        }
+                        if (film.type3!=null){
+                            name3=film.type3.name
+                        }else {
+                            name3=" "
+                        }
+                        $p2.html("类型:"+name1+"/"+name2+"/"+name3);
+                        $p3=$("<p>");
+                        $p4=$("<p>");
+                        $p3.addClass("film_date");
+                        var date=new Date(film.date);
+                        $p3.html("上映日期"+date.getFullYear()+"-"+(1+date.getMonth())+"-"+date.getDate());
+                        $p4.addClass("red_name");
+                        $p4.html(film.name);
+                        $div3.append($p1);
+                        $div3.append($p2);
+                        $div3.append($p3);
+                        $div2.append($img1);
+                        $div1.append($div2);
+                        $div1.append($div3);
+                        $div1.append($p4);
+                        $("#show").append($div1);
+                    })
+                })
+            })
+        }
+        //按钮背景红色
+        function red(){
+            $arr = $(this).siblings();
+            // console.log("all"+$arr)
+            $.each($arr,function (){
+                console.log($(this));
+                $(this).removeClass("red");
+                $(this).removeClass("white");
+            })
+            $(this).addClass("red");
+            $(this).addClass("white");
+            init();
+        }
+    </script>
+    <style>
+        *{ padding: 0;margin: 0;}
+        #navdiv{
+            width: 100%;height: 60px;background-color: black;color: white;min-width: 1200px;z-index: 5;
+        }
+        #nav{
+            display: flex;width: 300px;margin: 20px auto;
+        }
+        #nav>li{
+            list-style:none;margin-left: 30px;line-height: 60px;
+        }
+        #type{
+            height:100px;width: 90%;min-width: 1200px;border-bottom: rgb(228, 228, 206) solid 1px;margin: 20px auto;
+            display: flex;flex-wrap: wrap;box-sizing: border-box;
+        }
+        #type>p{
+            height: 30px;line-height: 30px;text-align: center;
+            border-radius: 15px;min-width: 60px;color:black;margin :10px 0 0 10px;
+        }
+        #type>p:hover{color: red;}
+        #show{
+            width: 80%;min-width: 1200px;margin: 20px auto;display: flex;justify-content: space-between;flex-wrap: wrap;
+
+        }
+        .film_div{
+            width: 160px;height: 260px;margin-left: 20px;position: relative;
+        }
+        .film_img{
+            width: 160px;height: 220px;position: relative;
+        }
+        .film_img img{
+            position: absolute;
+        }
+        .film_name{
+            text-align:left;font-size: 15px;
+        }
+        .disnone{
+            height: 100px;width: 160px;background-color: aliceblue;position: relative;bottom: 100px;
+            z-index: 2;color: burlywood;font-size: 14px;text-align: left;display: none;
+        }
+        .block{display: block}
+        .red_name{
+            position: absolute;bottom: 0px;left:50%;transform: translate(-50%,0);  z-index: 2;color: rgba(255, 0, 0, 0.95);font-size:16px;text-align: center;
+        }
+        .red{
+            background-color: red;
+        }
+        .white:hover{
+            color: white !important;
+        }
+    </style>
+
+    <!--    <script>location.href='/html/showfilm.html';location.reload()</script>-->
+</head>
+<body>
+<div id="container">
+    <div id="header" style="position: absolute;top: 0px;width: 100%;height: 100px">
+        <iframe src="header.html" frameborder="0"scrolling="no"width="100%" height="100px"></iframe>
+    </div>
+    <hr style="margin-top: 80px;">
+    <div id="main">
+        <div id="navdiv">
+            <ul id="nav" >
+                <li id="onshow"  temp="on" class="nav">正在热映</li>
+                <li  temp="early" class="nav">即将上映</li>
+                <li >经典影片</li>
+            </ul>
+        </div>
+        <div id="type">
+            <p style="color: rgb(182, 178, 172);background-color: white;">类型:</p>
+            <p id="showall" class="red" >全部</p>
+            <p class="typesub" ty="1">爱情</p>
+            <p class="typesub" ty="2">喜剧</p>
+            <p class="typesub" ty="3">动画</p>
+            <p class="typesub" ty="4">剧情</p>
+            <p class="typesub" ty="5">恐怖</p>
+            <p class="typesub" ty="6">惊悚</p>
+            <p class="typesub" ty="7">科幻</p>
+            <p class="typesub" ty="8">动作</p>
+            <p class="typesub" ty="9">悬疑</p>
+            <p class="typesub" ty="10">犯罪</p>
+            <p class="typesub" ty="11">冒险</p>
+            <p class="typesub" ty="12">战争</p>
+            <p class="typesub" ty="13">奇幻</p>
+            <p class="typesub" ty="14">运动</p>
+            <p class="typesub" ty="15">家庭</p>
+            <p class="typesub" ty="16">古装</p>
+            <p class="typesub" ty="17">武侠</p>
+            <p class="typesub" ty="18">西部</p>
+            <p class="typesub" ty="19">历史</p>
+            <p class="typesub" ty="20">传记</p>
+            <p class="typesub" ty="21">歌舞</p>
+            <p class="typesub" ty="25">纪录片</p>
+            <p class="typesub" ty="22"> 灾难</p>
+            <p class="typesub" ty="23">青春</p>
+            <p class="typesub" ty="24">儿童</p>
+            <p class="typesub" ty="27">其他</p>
+        </div>
+        <div id="show">
+            <!--                <div id="fid" class="film_div">-->
+            <!--                    <div id="imgid" class="film_img">-->
+            <!--                        <img src="">-->
+            <!--                        <div class="disnone">-->
+            <!--                            <p class="film_name">wusha</p>-->
+            <!--                            <p class="film_type">类型</p>-->
+            <!--                            <p class="film_date">上映日期</p>-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                    <p class="red_name">wusha</p>-->
+            <!--                </div>-->
+        </div>
+    </div>
+    <div id="footer" style="width: 100%;min-width: 1200px;background-color: black;">
+        <p style="text-align: center;color: gainsboro;">关于猫眼 : 关于我们  管理团队  投资者关系      友情链接 : 美团网  格瓦拉  美团下载  欢喜首映<br>
+
+            商务合作邮箱：v@maoyan.com 客服电话：10105335 违法和不良信息/涉未成年人有害信息举报电话：4006018900<br>
+
+            用户举报/涉未成年人有害信息举报邮箱：tousujubao@meituan.com 舞弊线索举报邮箱：wubijubao@maoyan.com<br>
+
+            中华人民共和国增值电信业务经营许可证 京B2-20190350  营业性演出许可证 京演（机构）（2019）4094号<br>
+
+            广播电视节目制作经营许可证 （京）字第08478号  网络文化经营许可证 京网文（2019）3837-369号<br>
+
+            猫眼用户服务协议  猫眼平台交易规则总则  隐私政策<br>
+
+            京公网安备 11010102003232号  京ICP备16022489号-1<br>
+
+            北京猫眼文化传媒有限公司<br>
+
+            ©2021 猫眼电影 www.maoyan.com</p>
+    </div>
+</div>
+</body>
+</html>

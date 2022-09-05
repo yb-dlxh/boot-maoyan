@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.bootmaoyan.dao.FilmMapper">
+    <!--查询全部电影-->
+    <select id="selectAll" resultType="FilmDB">
+        select *
+        from film
+    </select>
+
+    <select id="selectByType" resultType="FilmDB" parameterType="Type_f">
+        select *
+        from film
+        where type1 =#{id} or type2 =#{id} or type3 =#{id} ;
+
+    </select>
+
+    <select id="selectLikeName" resultType="FilmDB" parameterType="string">
+        select *
+        from film
+        where name like #{string};
+    </select>
+
+    <select id="selectByDateBefore" resultType="FilmDB" >
+        select *
+        from film
+        where DATE &lt; now();
+    </select>
+
+    <select id="selectByDateAfter" resultType="FilmDB" >
+        select *
+        from film
+        where DATE > now();
+    </select>
+    <select id="selectByID" resultType="FilmDB" parameterType="int">
+        select *
+        from film
+        where id=#{i} ;
+    </select>
+
+    <insert id="insertFilm" parameterType="FilmDB">
+        insert into film
+        values (#{id}, #{name}, #{date}, #{type1.id}, #{type2.id}, #{type3.id}, #{dra}, #{imgno})
+    </insert>
+
+    <delete id="delectFilm" parameterType="FilmDB">
+        delete
+        film where id=(
+        #{Film.id}
+        )
+    </delete>
+
+
+</mapper>
+
+
